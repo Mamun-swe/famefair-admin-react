@@ -24,6 +24,12 @@ const MenuItems = () => {
         $('.toggle-dark').toggleClass('is-active')
     }
 
+    const toggleSetting = () => {
+        $('.setting-sub-menu').toggle('50')
+        $('.setting-rotate').toggleClass('down')
+        $('.setting-toggle-dark').toggleClass('is-active')
+    }
+
     return (
         <div>
             <NavLink exact to="/admin/" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
@@ -70,15 +76,32 @@ const MenuItems = () => {
             </div>
 
 
-            <NavLink exact to="/" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
+            <NavLink exact to="/admin/brand" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
                 <Icon icon={tags} className="mr-3" /><span className="pt-3">brands</span>
             </NavLink>
-            <NavLink exact to="/" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
+            <NavLink exact to="/admin/order" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
                 <Icon icon={cart} className="mr-3" /><span className="pt-3">orders</span>
             </NavLink>
-            <NavLink exact to="/" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
+
+
+            {/* Setting */}
+            <button type="button" className="btn btn-block rounded-0 shadow-none setting-toggle-dark" onClick={toggleSetting}>
                 <Icon icon={cog} className="mr-3" /><span className="pt-3">settings</span>
-            </NavLink>
+                <Icon icon={chevronRight} className="setting-rotate float-right"></Icon>
+            </button>
+
+            {/* Setting Sub Menu */}
+            <div className="setting-sub-menu pl-3">
+                <NavLink exact to="/admin/setting/banner" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
+                    <Icon icon={record} className="mr-3" /><span className="pt-3">Banner</span>
+                </NavLink>
+                <NavLink exact to="/admin/setting/contact" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
+                    <Icon icon={record} className="mr-3" /><span className="pt-3">contact</span>
+                </NavLink>
+
+            </div>
+
+
             <NavLink exact to="/" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
                 <Icon icon={group} className="mr-3" /><span className="pt-3">admin</span>
             </NavLink>

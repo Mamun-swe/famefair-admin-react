@@ -5,10 +5,10 @@ import { Modal } from 'antd'
 import "antd/dist/antd.css"
 import { Icon } from 'react-icons-kit'
 
-import UserImg from '../assets/images/category.jpg'
+import BrandImg from '../assets/images/walton.jpg'
 import { spinner3 } from 'react-icons-kit/icomoon/spinner3'
 
-const CategoryTable = ({ category }) => {
+const BrandTable = ({ brand }) => {
     const [visible, setVisible] = useState(false)
     const [catId, setCatId] = useState()
     const [loading, setLoading] = useState(false)
@@ -44,12 +44,12 @@ const CategoryTable = ({ category }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {category.map((data, i) =>
+                    {brand.map((data, i) =>
                         <tr className="border-bottom" key={i}>
                             <td className="pl-3 pt-3"><p>{data.id}</p></td>
                             <td className="text-capitalize pt-3"><p>{data.name}</p></td>
                             <td className="text-center">
-                                <img src={UserImg} className="img-fluid" alt="..." />
+                                <img src={BrandImg} className="img-fluid" alt="..." />
                             </td>
                             <td className="text-center pt-3">
                                 <Dropdown>
@@ -57,7 +57,7 @@ const CategoryTable = ({ category }) => {
                                         Action
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu alignRight className="shadow border-0 rounded-0 p-0">
-                                        <Dropdown.Item as={Link} to={`/admin/category/${data.id}/edit`}>Edit</Dropdown.Item>
+                                        <Dropdown.Item as={Link} to={`/admin/brand/${data.id}/edit`}>Edit</Dropdown.Item>
                                         <Dropdown.Item href="#" onClick={() => handleDeleteModal(data.id)}>Delete</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
@@ -67,7 +67,7 @@ const CategoryTable = ({ category }) => {
                 </tbody>
             </table>
 
-            {/* Category Delete Modal */}
+            {/* Brand Delete Modal */}
             <Modal
                 title="Are you sure want to delete ?"
                 visible={visible}
@@ -85,10 +85,10 @@ const CategoryTable = ({ category }) => {
                 </div>
             </Modal>
 
-            {/* Category Edit Modal */}
-
+            {/* Brand Edit Modal */}
+            
         </div >
     );
 };
 
-export default CategoryTable;
+export default BrandTable;

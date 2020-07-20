@@ -41,7 +41,6 @@ const Edit = () => {
         setPreviewURL(null)
         setCropBox(false)
         setVisible(false)
-        setLoading(false)
     }
 
     // Upload File
@@ -50,7 +49,7 @@ const Edit = () => {
     }
 
     // Submit Category
-    const submitCategory = data => {
+    const submitBrand = data => {
         console.log(data)
         setSubmitLoading(true)
         success()
@@ -65,9 +64,9 @@ const Edit = () => {
                         <div className="card shadow-sm border-0">
                             <div className="card-header bg-white py-3">
                                 <div className="d-flex">
-                                    <div><h5 className="mb-0 mt-1 mt-lg-2 text-capitalize">category edit</h5></div>
+                                    <div><h5 className="mb-0 mt-1 mt-lg-2 text-capitalize">brand edit</h5></div>
                                     <div className="ml-auto">
-                                        <Link to="/admin/category" type="button" className="btn btn-light shadow-none text-dark">
+                                        <Link to="/admin/brand" type="button" className="btn btn-light shadow-none text-dark">
                                             <Icon icon={arrow_left} size={15} />
                                         </Link>
                                     </div>
@@ -75,18 +74,18 @@ const Edit = () => {
                             </div>
 
                             <div className="card-body">
-                                <form onSubmit={handleSubmit(submitCategory)}>
+                                <form onSubmit={handleSubmit(submitBrand)}>
                                     <div className="form-group mb-4">
-                                        {errors.category_name && errors.category_name.message ? (
-                                            <small className="text-danger">{errors.category_name && errors.category_name.message}</small>
-                                        ) : <small className="text-muted">Category name</small>
+                                        {errors.brand_name && errors.brand_name.message ? (
+                                            <small className="text-danger">{errors.brand_name && errors.brand_name.message}</small>
+                                        ) : <small className="text-muted">Brand name</small>
                                         }
                                         <input
                                             type="text"
-                                            name="category_name"
+                                            name="brand_name"
                                             className="form-control rounded-0 shadow-none"
                                             ref={register({
-                                                required: "Category name is required."
+                                                required: "Brand name is required."
                                             })}
                                         />
                                     </div>

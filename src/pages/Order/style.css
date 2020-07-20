@@ -1,0 +1,38 @@
+.order-index .order-count-card {
+    border: 0;
+    margin-bottom: 30px;
+    height: 120px;
+}
+
+.order-index .order-count-card h2 {
+    font-family: roboto-black;
+}
+
+.order-index .order-count-card h6 {
+    font-size: 13px;
+    color: #555;
+    text-transform: uppercase;
+    font-family: roboto-bold;
+}
+
+.order-index .order-type-links .btn {
+    margin-top: 0;
+    font-size: 13px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 10px;
+    background: #fff;
+    text-transform: capitalize;
+    font-family: roboto-regular;
+}
+
+.order-index .order-type-links .is-active {
+    color: #fff;
+    background: #b11654;
+}
+
+@media(max-width: 576px) {
+    .order-index .order-count-card h2 {
+        font-size: 18px;
+    }
+}

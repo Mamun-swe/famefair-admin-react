@@ -8,12 +8,12 @@ import { Icon } from 'react-icons-kit'
 import { plus } from 'react-icons-kit/metrize/plus'
 import { spinner3 } from 'react-icons-kit/icomoon/spinner3'
 
-import CategoryTable from '../../components/CategoryTable'
+import BrandTable from '../../components/BrandTable'
 
 const Index = () => {
     const [visible, setVisible] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [categories, setCategories] = useState([])
+    const [brands, setBrands] = useState([])
 
     // Modal Show
     const showModal = () => {
@@ -39,7 +39,7 @@ const Index = () => {
     const fetchData = () => {
         axios.get(`${URL}users`)
             .then(res => {
-                setCategories(res.data)
+                setBrands(res.data)
             })
     }
 
@@ -62,7 +62,7 @@ const Index = () => {
                                 <div className="d-md-flex">
                                     <div>
                                         <div className="d-flex">
-                                            <div><h5 className="mb-0 mt-1 mt-lg-2 text-capitalize">{categories.length} categories</h5></div>
+                                            <div><h5 className="mb-0 mt-1 mt-lg-2 text-capitalize">{brands.length} Brands</h5></div>
                                             <div className="ml-auto d-md-none">
                                                 <button type="button" className="btn btn-light shadow-none text-dark" onClick={showModal}>
                                                     <Icon icon={plus} size={15} />
@@ -100,7 +100,7 @@ const Index = () => {
                             </div>
                             {/* Data Table */}
 
-                            <CategoryTable category={categories} />
+                            <BrandTable brand={brands} />
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@ const Index = () => {
 
             {/* Category Add Modal */}
             <Modal
-                title="Make New Category"
+                title="Make New Brand"
                 visible={visible}
                 onCancel={handleCancel}
                 footer={null}

@@ -22,6 +22,10 @@
     display: none;
 }
 
+.side-menu .menu .menu-content .setting-sub-menu {
+    display: none;
+}
+
 .rotate {
     -moz-transition: all .3s linear;
     -webkit-transition: all .3s linear;
@@ -29,6 +33,18 @@
 }
 
 .rotate.down {
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.setting-rotate {
+    -moz-transition: all .3s linear;
+    -webkit-transition: all .3s linear;
+    transition: all .3s linear;
+}
+
+.setting-rotate.down {
     -moz-transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
