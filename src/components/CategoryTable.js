@@ -85,7 +85,7 @@ const CategoryTable = ({ category }) => {
                 </div>
             </Modal>
 
-            {/* Category Edit Modal */}
+            {/* Category Delete Modal */}
 
         </div >
     );

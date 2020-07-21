@@ -13,8 +13,10 @@ import bannerImg from '../../../assets/images/category.jpg'
 
 const Index = () => {
     const [visible, setVisible] = useState(false)
+    const [deleteVisible, setDeleteVisible] = useState(false)
     const [loading, setLoading] = useState(false)
     const [banners, setBanners] = useState([])
+    const [deleteId, setDeleteId] = useState()
 
     // Modal Show
     const showModal = () => {
@@ -26,6 +28,18 @@ const Index = () => {
         setVisible(false)
         setLoading(false)
     };
+
+    // Handle Delete
+    const handleDeleteModal = (data) => {
+        setDeleteId(data)
+        setDeleteVisible(true)
+    }
+
+    // Hide delete
+    const hideDelete = e => {
+        setDeleteVisible(false)
+        setLoading(false)
+    }
 
     // Success Notification
     const success = () => {
@@ -49,6 +63,12 @@ const Index = () => {
         event.preventDefault()
         setLoading(true)
         success()
+    }
+
+    // Submit Delete
+    const submitDelete = () => {
+        console.log(deleteId)
+        setLoading(true)
     }
 
     return (
@@ -86,7 +106,7 @@ const Index = () => {
                                                 <img src={bannerImg} className="img-fluid" alt="..." />
                                             </td>
                                             <td className="text-center pt-3">
-                                                <button type="button" className="btn btn-light shadow-none btn-sm text-muted p-1">
+                                                <button type="button" className="btn btn-light shadow-none btn-sm text-muted p-1" onClick={() => handleDeleteModal(data.id)}>
                                                     <Icon icon={androidDelete} size={20} />
                                                 </button>
                                             </td>
@@ -124,6 +144,26 @@ const Index = () => {
                 </form>
 
             </Modal>
+
+            {/* Banner Delete Modal */}
+            <Modal
+                title="Are you sure want to delete ?"
+                visible={deleteVisible}
+                onCancel={hideDelete}
+                footer={null}
+            >
+                <div>
+                    <button type="button" className="btn btn-primary shadow-none text-white py-2 px-4" onClick={submitDelete}>
+                        {loading ? (
+                            <p className="mb-0"><Icon icon={spinner3} size={15} className="spin mr-2" />Deleting...</p>
+                        ) : <p className="mb-0">Yes</p>}
+                    </button>
+
+                    <button type="button" className="btn btn-light shadow-none text-dark py-2 px-4 ml-2" onClick={hideDelete}>No</button>
+                </div>
+            </Modal>
+
+            {/* Banner Delete Modal */}
         </div>
     );
 };

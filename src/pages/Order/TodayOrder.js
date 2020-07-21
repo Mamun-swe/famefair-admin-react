@@ -1,9 +1,11 @@
 import React from 'react';
+import './style.css';
+import OrderTable from '../../components/OrderTable';
 
 const TodayOrder = () => {
     return (
         <div>
-            <h1>Today Orders</h1>
+            <OrderTable />
         </div>
     );
 };

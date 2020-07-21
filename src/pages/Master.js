@@ -43,7 +43,7 @@ const Master = () => {
                     <Route exact path="/admin/brand/:id/edit" component={BrandEdit} />
 
                     {/* Order */}
-                    <Route exact path="/admin/order" component={OrderIndex} />
+                    <Route path="/admin/order" component={OrderIndex} />
 
                     {/* Website Setting */}
                     {/* Banner */}
