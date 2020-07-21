@@ -1,0 +1,50 @@
+.admin-list .card {
+    border-radius: 6px;
+}
+
+.admin-list .card .card-header {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.admin-list .card .card-header h5 {
+    font-family: roboto-bold;
+    font-size: 17px;
+}
+
+.admin-list .card .card-header .form-control {
+    font-family: roboto-regular;
+    font-size: 14px;
+    height: 33px;
+    border: 1px solid #dee2e6;
+}
+
+.admin-list .card .card-header .btn {
+    font-family: roboto-bold;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.admin-list .form-control {
+    font-size: 14px;
+    height: 40px;
+    font-family: roboto-regular;
+    border: 1px solid #dfdfdf;
+}
+
+.admin-list .card .card-body .submit-btn {
+    font-size: 14px;
+    padding: 9px 35px;
+    font-family: roboto-bold;
+    text-transform: uppercase;
+}
+
+.admin-profile h5 {
+    font-family: roboto-bold;
+}
+
+.admin-profile p {
+    font-size: 13px;
+    margin-bottom: 8px;
+    font-family: roboto-regular;
+}

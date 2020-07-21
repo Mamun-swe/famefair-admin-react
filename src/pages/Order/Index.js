@@ -57,7 +57,7 @@ const Index = () => {
                 {/* End Order Count */}
 
                 {/* Order Types */}
-                <div className="row order-type-links">
+                <div className="row order-type-links mb-3">
                     <div className="col-6 col-sm-4 col-lg-2 pr-1">
                         <NavLink exact to="/admin/order/" activeClassName="is-active" className="btn btn-block shadow-sm">Today orders</NavLink>
                     </div>

@@ -102,7 +102,7 @@ const MenuItems = () => {
             </div>
 
 
-            <NavLink exact to="/" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
+            <NavLink exact to="/admin/all-admin" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
                 <Icon icon={group} className="mr-3" /><span className="pt-3">admin</span>
             </NavLink>
             <NavLink exact to="/" type="button" activeClassName="is-active" className="btn btn-block rounded-0 shadow-none">
