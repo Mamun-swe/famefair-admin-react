@@ -39,6 +39,36 @@
     text-transform: uppercase;
 }
 
+@media(max-width: 576px) {
+    .admin-profile .card {
+        width: 90vw;
+        margin: auto;
+    }
+}
+
+@media(min-width: 576px) {
+    .admin-profile .card {
+        width: 450px;
+        margin: auto;
+    }
+    .admin-profile .info-box {
+        width: 300px;
+        margin: auto;
+    }
+}
+
+.admin-profile .img-box {
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    margin: auto;
+}
+
+.admin-profile .img-box img {
+    min-width: 100%;
+    min-height: 100%;
+}
+
 .admin-profile h5 {
     font-family: roboto-bold;
 }

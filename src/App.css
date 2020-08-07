@@ -74,6 +74,11 @@
   }
 }
 
+.empty-cart-img {
+  max-width: 200px;
+  margin: auto;
+}
+
 .flex-center {
   display: -webkit-box;
   display: -ms-flexbox;

@@ -47,6 +47,10 @@
     border: 1px solid #dee2e6;
 }
 
+.ant-modal .ant-modal-body .selected-image {
+    max-height: 150px;
+}
+
 .ant-modal .ant-modal-body .btn {
     font-family: roboto-bold;
     text-transform: uppercase;
@@ -70,4 +74,8 @@
 
 .category .preview-body .loading-box h3 {
     font-weight: 900;
+}
+
+.category .present-img {
+    max-height: 200px;
 }

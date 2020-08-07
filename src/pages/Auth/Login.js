@@ -2,12 +2,32 @@ import React from 'react';
 import './style.css';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { message } from 'antd';
+import axios from 'axios';
+import api from '../../url';
 
 const Login = (props) => {
     const { register, handleSubmit, errors } = useForm();
+
+    const failed = msg => { message.warning(msg) }
+
     const onSubmit = data => {
-        console.log(data)
-        props.history.push('/admin')
+        axios.post(`${api}admin/auth/login`, data)
+            .then(res => {
+                if (res.status === 204) {
+                    failed('Invali e-mail or password')
+                }
+
+                if (res.status === 200) {
+                    localStorage.setItem('access_token', res.data.token)
+                    props.history.push('/admin')
+                }
+            })
+            .catch(err => {
+                if (err) {
+                    console.log(err)
+                }
+            })
     }
 
     return (

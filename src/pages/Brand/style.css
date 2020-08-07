@@ -1,31 +1,31 @@
-.category .card {
+.brand .card {
     border-radius: 6px;
 }
 
-.category .card .card-header {
+.brand .card .card-header {
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
 }
 
-.category .card .card-header h5 {
+.brand .card .card-header h5 {
     font-family: roboto-bold;
     font-size: 17px;
 }
 
-.category .card .card-header .form-control {
+.brand .card .card-header .form-control {
     font-family: roboto-regular;
     font-size: 14px;
     height: 33px;
     border: 1px solid #dee2e6;
 }
 
-.category .card .card-header .btn {
+.brand .card .card-header .btn {
     font-family: roboto-bold;
     text-transform: uppercase;
     font-size: 13px;
 }
 
-.category .card .card-body .file-upload {
+.brand .card .card-body .file-upload {
     width: 70px;
     height: 70px;
     cursor: pointer;
@@ -33,7 +33,7 @@
     border-style: dotted;
 }
 
-.category .submit-btn {
+.brand .submit-btn {
     width: 140px;
     height: 70px;
     font-size: 13px;
@@ -55,11 +55,11 @@
     padding-bottom: 8px;
 }
 
-.category .preview-body {
+.brand .preview-body {
     position: relative;
 }
 
-.category .preview-body .loading-box {
+.brand .preview-body .loading-box {
     position: absolute;
     top: 0;
     left: 0;
@@ -68,6 +68,6 @@
     background: rgba(255, 255, 255, 0.849);
 }
 
-.category .preview-body .loading-box h3 {
+.brand .preview-body .loading-box h3 {
     font-weight: 900;
 }

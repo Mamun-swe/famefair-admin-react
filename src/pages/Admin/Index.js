@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from 'react-icons-kit'
 import axios from 'axios'
-import URL from '../../url'
+import api from '../../url'
 import './style.css'
 import { Dropdown } from 'react-bootstrap'
 
 import { plus } from 'react-icons-kit/metrize/plus'
 import { androidPerson } from 'react-icons-kit/ionicons/androidPerson'
+import { pencil } from 'react-icons-kit/iconic/pencil'
 import { warning } from 'react-icons-kit/typicons/warning'
 
 const Index = () => {
@@ -20,9 +21,44 @@ const Index = () => {
 
     // fetch data
     const fetchData = () => {
-        axios.get(`${URL}users`)
+        axios.get(`${api}admin/auth/index`)
             .then(res => {
-                setAdmins(res.data)
+                setAdmins(res.data.admins)
+            })
+            .catch(err => {
+                if (err) {
+                    console.log(err)
+                }
+            })
+    }
+
+    // block admin
+    const bloackAccount = id => {
+        axios.put(`${api}admin/auth/block/${id}?status=blocked`)
+            .then(res => {
+                if (res.status === 200) {
+                    fetchData()
+                }
+            })
+            .catch(err => {
+                if (err) {
+                    console.log(err.response)
+                }
+            })
+    }
+
+    // Unblock ADmin
+    const unBlockAdmin = id => {
+        axios.put(`${api}admin/auth/block/${id}?status=offline`)
+            .then(res => {
+                if (res.status === 200) {
+                    fetchData()
+                }
+            })
+            .catch(err => {
+                if (err) {
+                    console.log(err.response)
+                }
             })
     }
 
@@ -62,13 +98,19 @@ const Index = () => {
                                     <tbody>
                                         {admins.map((data, i) =>
                                             <tr className="border-bottom" key={i}>
-                                                <td className="pl-3"><p>{data.id}</p></td>
+                                                <td className="pl-3"><p>{i + 1}</p></td>
                                                 <td className="text-capitalize"><p>{data.name}</p></td>
                                                 <td className="text-lowercase"><p>{data.email}</p></td>
-                                                <td><p>{data.phone}</p></td>
-                                                <td className="text-capitalize"><p>super admin</p></td>
+                                                <td><p>{data.phoneNumber}</p></td>
+                                                <td className="text-capitalize"><p>{data.role}</p></td>
                                                 <td className="text-center text-capitalize">
-                                                    <p className="text-success bg-light pb-1">active</p>
+                                                    {data.status === 'offline' ? (
+                                                        <p className="text-muted bg-light pb-1">{data.status}</p>
+                                                    ) : data.status === 'online' ? (
+                                                        <p className="text-success bg-light pb-1">{data.status}</p>
+                                                    ) : data.status === 'blocked' ? (
+                                                        <p className="text-danger bg-light pb-1">{data.status}</p>
+                                                    ) : null}
                                                 </td>
                                                 <td className="text-center">
                                                     <Dropdown>
@@ -76,10 +118,17 @@ const Index = () => {
                                                             Action
                                                         </Dropdown.Toggle>
                                                         <Dropdown.Menu alignRight className="shadow border-0 rounded-0 p-0">
-                                                            <Dropdown.Item as={Link} to={`/admin/${data.id}/profile`}>
+                                                            <Dropdown.Item as={Link} to={`/admin/${data._id}/profile`}>
                                                                 <Icon icon={androidPerson} size={15} className="pr-2" />View Profile
                                                             </Dropdown.Item>
-                                                            <Dropdown.Item href="#"><Icon icon={warning} size={15} className="text-danger pr-2" />Block Account</Dropdown.Item>
+                                                            <Dropdown.Item as={Link} to={`/admin/${data._id}/edit`}>
+                                                                <Icon icon={pencil} size={14} className="pr-2" />Edit Profile
+                                                            </Dropdown.Item>
+                                                            {data.status === 'blocked' ? (
+                                                                <Dropdown.Item href="#" onClick={() => unBlockAdmin(data._id)}><Icon icon={warning} size={15} className="text-warning pr-2" />Unblock Account</Dropdown.Item>
+                                                            ) :
+                                                                <Dropdown.Item href="#" onClick={() => bloackAccount(data._id)}><Icon icon={warning} size={15} className="text-danger pr-2" />Block Account</Dropdown.Item>
+                                                            }
                                                         </Dropdown.Menu>
                                                     </Dropdown>
                                                 </td>

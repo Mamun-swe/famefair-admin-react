@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Dropdown } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
-import { Modal } from 'antd'
+import { Modal, message } from 'antd'
 import "antd/dist/antd.css"
 import { Icon } from 'react-icons-kit'
+import axios from 'axios'
+import URL from '../url'
 
-import UserImg from '../assets/images/category.jpg'
 import { spinner3 } from 'react-icons-kit/icomoon/spinner3'
 
 const CategoryTable = ({ category }) => {
@@ -25,16 +26,31 @@ const CategoryTable = ({ category }) => {
         setLoading(false)
     }
 
-    const submitDelete = () => {
-        setLoading(true)
-        console.log(catId)
+    // Message
+    const success = () => {
+        message.success('Successfully one category deleted.')
     }
 
-    // Handle Edit
+    const submitDelete = () => {
+        setLoading(true)
+        axios.delete(`${URL}admin/category/delete/${catId}`)
+            .then(res => {
+                if (res.status === 200) {
+                    setLoading(false)
+                    setVisible(false)
+                    success()
+                }
+            })
+            .catch(err => {
+                if (err) {
+                    console.log(err.response)
+                }
+            })
+    }
 
     return (
         <div>
-            <table className="table data-table table-sm table-responsive-md table-borderless rounded">
+            <table className="table data-table table-sm table-responsive-sm table-borderless rounded">
                 <thead>
                     <tr className="border-bottom">
                         <td className="pl-3"><p>SL</p></td>
@@ -46,10 +62,10 @@ const CategoryTable = ({ category }) => {
                 <tbody>
                     {category.map((data, i) =>
                         <tr className="border-bottom" key={i}>
-                            <td className="pl-3 pt-3"><p>{data.id}</p></td>
+                            <td className="pl-3 pt-3"><p>{i + 1}</p></td>
                             <td className="text-capitalize pt-3"><p>{data.name}</p></td>
                             <td className="text-center">
-                                <img src={UserImg} className="img-fluid" alt="..." />
+                                <img src={data.image} className="img-fluid" alt="..." />
                             </td>
                             <td className="text-center pt-3">
                                 <Dropdown>

@@ -1,0 +1,45 @@
+.product .card {
+    border-radius: 6px;
+}
+
+.product .card .card-header {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.product .card .card-header h5 {
+    font-family: roboto-bold;
+    font-size: 17px;
+}
+
+.product .card .card-header .form-control {
+    font-family: roboto-regular;
+    font-size: 14px;
+    height: 33px;
+    border: 1px solid #dee2e6;
+}
+
+.product .card .card-header .btn {
+    font-family: roboto-bold;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.product .card .card-body .submit-btn {
+    font-size: 13px;
+    padding: 9px 35px;
+    font-family: roboto-bold;
+    text-transform: uppercase;
+}
+
+.product .selected-image {
+    height: 120px;
+}
+
+.product .upload-button-box {
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    border: 1px solid #a8a7a7;
+    border-style: dotted;
+}

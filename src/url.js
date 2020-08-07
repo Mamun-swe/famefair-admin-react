@@ -1,3 +1,3 @@
 
-const URL = 'https://jsonplaceholder.typicode.com/'
+const URL = 'http://localhost:5000/api/'
 module.exports = URL

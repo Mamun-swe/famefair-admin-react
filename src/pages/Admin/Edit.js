@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import { Icon } from 'react-icons-kit'
 import { useForm } from "react-hook-form"
@@ -9,25 +9,45 @@ import api from '../../url'
 import { arrow_left } from 'react-icons-kit/ikons/arrow_left'
 import { spinner3 } from 'react-icons-kit/icomoon/spinner3'
 
-const Create = () => {
+const Edit = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const [loading, setLoading] = useState(false)
+    const [admin, setAdmin] = useState({})
 
     // Success Notification
     const success = () => {
-        message.success('Successfully Admin Created')
+        message.success('Successfully Admin Updated')
     }
 
     const failed = (msg) => {
         message.warning(msg)
     }
 
+    useEffect(() => {
+        fetchAdmin()
+    }, [])
+
+
+    // fetch admin
+    const fetchAdmin = () => {
+        axios.get(`${api}admin/auth/me/${props.match.params.id}`)
+            .then(res => {
+                setAdmin(res.data.admin)
+            })
+            .catch(err => {
+                if (err) {
+                    console.log(err)
+                }
+            })
+    }
+
     // Submit Form
     const onSubmit = data => {
         setLoading(true)
-        axios.post(`${api}admin/auth/register`, data)
+        axios.put(`${api}admin/auth/update/${props.match.params.id}`, data)
             .then(res => {
-                if (res.status === 201) {
+                if (res.status === 200) {
+                    fetchAdmin()
                     setLoading(false)
                     success()
                 }
@@ -51,7 +71,7 @@ const Create = () => {
                             {/* Header */}
                             <div className="card-header bg-white py-3">
                                 <div className="d-flex">
-                                    <div><h5 className="mb-0 mt-1 mt-lg-2 text-capitalize">New Admin</h5></div>
+                                    <div><h5 className="mb-0 mt-1 mt-lg-2 text-capitalize">Edit Admin</h5></div>
                                     <div className="ml-auto">
                                         <Link to="/admin/all-admin" type="button" className="btn btn-light shadow-none text-dark">
                                             <Icon icon={arrow_left} size={15} />
@@ -75,6 +95,7 @@ const Create = () => {
                                                 <input
                                                     name="name"
                                                     type="text"
+                                                    defaultValue={admin.name}
                                                     className="form-control shadow-none"
                                                     ref={register({
                                                         required: "Name is required",
@@ -97,6 +118,7 @@ const Create = () => {
                                                 <input
                                                     name="email"
                                                     type="text"
+                                                    defaultValue={admin.email}
                                                     className="form-control shadow-none"
                                                     ref={register({
                                                         required: "E-mail is required",
@@ -119,6 +141,7 @@ const Create = () => {
                                                 <input
                                                     name="phoneNumber"
                                                     type="text"
+                                                    defaultValue={admin.phoneNumber}
                                                     className="form-control shadow-none"
                                                     ref={register({
                                                         required: "Phone is required",
@@ -150,6 +173,7 @@ const Create = () => {
                                                         required: "Role is required"
                                                     })}
                                                 >
+                                                    <option defaultValue={admin.role} className="text-capitalize">{admin.role}</option>
                                                     <option value="admin">Admin</option>
                                                     <option value="super_admin">Super Admin</option>
                                                     <option value="order_management">Order Management</option>
@@ -157,33 +181,11 @@ const Create = () => {
                                             </div>
                                         </div>
 
-                                        {/* Password */}
-                                        <div className="col-12">
-                                            <div className="form-group mb-4">
-                                                {errors.password && errors.password.message ? (
-                                                    <small className="text-danger">{errors.password && errors.password.message}</small>
-                                                ) : <small className="text-muted">Password</small>
-                                                }
-                                                <input
-                                                    name="password"
-                                                    type="password"
-                                                    className="form-control shadow-none"
-                                                    ref={register({
-                                                        minLength: {
-                                                            value: 6,
-                                                            message: "Please enter minimum 6 characters",
-                                                        },
-                                                        required: "Please enter password",
-                                                    })}
-                                                />
-                                            </div>
-                                        </div>
-
                                         <div className="col-12">
                                             <button type="submit" className="btn btn-primary shadow-none text-white float-right submit-btn">
                                                 {loading ? (
-                                                    <p className="mb-0"><Icon icon={spinner3} size={15} className="spin mr-2" />adding...</p>
-                                                ) : <p className="mb-0">submit</p>}
+                                                    <p className="mb-0"><Icon icon={spinner3} size={15} className="spin mr-2" />updating...</p>
+                                                ) : <p className="mb-0">update</p>}
                                             </button>
                                         </div>
 
@@ -198,4 +200,4 @@ const Create = () => {
     );
 };
 
-export default Create;
+export default Edit;
