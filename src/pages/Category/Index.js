@@ -54,6 +54,13 @@ const Index = () => {
         }
     }
 
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
     useEffect(() => {
         fetchData()
     }, [])
@@ -61,7 +68,7 @@ const Index = () => {
     // fetch data
     const fetchData = () => {
         setLoader(true)
-        axios.get(`${api}admin/category/index`)
+        axios.get(`${api}admin/category/index`, header)
             .then(res => {
                 if (res.status === 204) {
                     setLoader(false)
@@ -72,8 +79,9 @@ const Index = () => {
                 setLoader(false)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err)
+                if (err && err.response.status === 401) {
+                    setLoader(false)
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -84,7 +92,7 @@ const Index = () => {
         formData.append('name', data.name)
         formData.append('cat_image', selectedFile)
         setLoading(true)
-        axios.post(`${api}admin/category/create`, formData)
+        axios.post(`${api}admin/category/create`, formData, header)
             .then(res => {
                 if (res.status === 201) {
                     fetchData()
@@ -94,6 +102,11 @@ const Index = () => {
                 }
             })
             .catch(err => {
+                if (err && err.response.status === 401) {
+                    setLoader(false)
+                    return failed(err.response.data.message);
+                }
+
                 if (err.response.status === 409 && err.response.data.message === 'exist') {
                     failed('This category already created .')
                     setLoading(false)

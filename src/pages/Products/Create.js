@@ -26,6 +26,13 @@ const Create = () => {
         message.warning(msg)
     }
 
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
     // Image onChange
     const imageChangeHandeller = event => {
         let file = event.target.files[0]
@@ -43,26 +50,26 @@ const Create = () => {
 
     // fetch category
     const fetchCategory = () => {
-        axios.get(`${api}admin/category/index`)
+        axios.get(`${api}admin/category/index`, header)
             .then(res => {
                 setCategories(res.data.results)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err)
+                if (err && err.response.status === 401) {
+                    return failed(err.response.data.message);
                 }
             })
     }
 
     // fetch brand
     const fetchBrands = () => {
-        axios.get(`${api}admin/brand/index`)
+        axios.get(`${api}admin/brand/index`, header)
             .then(res => {
                 setBrands(res.data.results)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err)
+                if (err && err.response.status === 401) {
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -77,9 +84,10 @@ const Create = () => {
         formData.append('price', data.price)
         formData.append('quantity', data.quantity)
         formData.append('description', data.description)
+        formData.append('tag', data.tag)
         formData.append('product_image', selectedFile)
         setLoading(true)
-        axios.post(`${api}admin/product/create`, formData)
+        axios.post(`${api}admin/product/create`, formData, header)
             .then(res => {
                 if (res.status === 201) {
                     setLoading(false)
@@ -90,6 +98,10 @@ const Create = () => {
                 if (err.response.status === 409 && err.response.data.message === 'exist') {
                     failed('This product already created .')
                     setLoading(false)
+                }
+                if (err && err.response.status === 401) {
+                    setLoading(false)
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -233,6 +245,28 @@ const Create = () => {
                                                         minLength: {
                                                             value: 50,
                                                             message: "Please enter minimum 50 characters",
+                                                        },
+                                                    })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Tag */}
+                                        <div className="col-12">
+                                            <div className="form-group mb-3">
+                                                {errors.tag && errors.tag.message ? (
+                                                    <small className="text-danger">{errors.tag && errors.tag.message}</small>
+                                                ) : <small className="text-muted">Tag</small>
+                                                }
+                                                <input
+                                                    type="text"
+                                                    name="tag"
+                                                    className="form-control shadow-none"
+                                                    ref={register({
+                                                        required: "Tag is required",
+                                                        minLength: {
+                                                            value: 5,
+                                                            message: "Please enter minimum 5 characters",
                                                         },
                                                     })}
                                                 />

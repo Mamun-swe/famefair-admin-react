@@ -3,6 +3,8 @@ import './Side-Menu.css'
 import $ from 'jquery'
 import Dropdown from 'react-bootstrap/Dropdown'
 import MenuItems from './MenuItems'
+import axios from 'axios'
+import api from '../url'
 
 import UserImg from '../assets/images/user.jpg'
 import BarIcon from '../assets/icons/bar.png'
@@ -14,6 +16,30 @@ const SideMenu = () => {
     const mobileMenuHandle = () => {
         $('.mobile-menu-content').toggleClass('show-menu')
     }
+
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
+    const logout = () => {
+        axios.put(`${api}admin/auth/logout`, header)
+            .then(res => {
+                if (res.status === 200) {
+                    localStorage.clear()
+                    window.location.href = '/'
+                }
+            })
+            .catch(err => {
+                if (err) {
+                    localStorage.clear()
+                    window.location.href = '/'
+                }
+            })
+    }
+
     return (
         <div className="side-menu">
             {/* Side Menu */}
@@ -67,7 +93,7 @@ const SideMenu = () => {
 
                                     <Dropdown.Menu alignRight className="border-0 shadow rounded-0 p-0">
                                         <Dropdown.Item href="#"><img src={CogIcon} className="pr-2" alt="..." />Profile</Dropdown.Item>
-                                        <Dropdown.Item href="#"><img src={LogoutIcon} className="pr-2" alt="..." />Logout</Dropdown.Item>
+                                        <Dropdown.Item href="#"><img src={LogoutIcon} className="pr-2" alt="..." onClick={logout} />Logout</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </div>

@@ -21,6 +21,13 @@ const Edit = (props) => {
     const [categories, setCategories] = useState([])
     const [brands, setBrands] = useState([])
 
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
     // Image onChange
     const imageChangeHandeller = event => {
         let file = event.target.files[0]
@@ -60,39 +67,39 @@ const Edit = (props) => {
 
     // fetch product
     const fetchProduct = () => {
-        axios.get(`${api}admin/product/show/${props.match.params.id}`)
+        axios.get(`${api}admin/product/show/${props.match.params.id}`, header)
             .then(res => {
                 setProduct(res.data)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err.response)
+                if (err && err.response.status === 401) {
+                    return failed(err.response.data.message);
                 }
             })
     }
 
     // fetch category
     const fetchCategory = () => {
-        axios.get(`${api}admin/category/index`)
+        axios.get(`${api}admin/category/index`, header)
             .then(res => {
                 setCategories(res.data.results)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err)
+                if (err && err.response.status === 401) {
+                    return failed(err.response.data.message);
                 }
             })
     }
 
     // fetch brand
     const fetchBrands = () => {
-        axios.get(`${api}admin/brand/index`)
+        axios.get(`${api}admin/brand/index`, header)
             .then(res => {
                 setBrands(res.data.results)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err)
+                if (err && err.response.status === 401) {
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -101,7 +108,7 @@ const Edit = (props) => {
     // submit from
     const onSubmit = data => {
         setLoading(true)
-        axios.put(`${api}admin/product/update/${props.match.params.id}/info`, data)
+        axios.put(`${api}admin/product/update/${props.match.params.id}/info`, data, header)
             .then(res => {
                 if (res.status === 200) {
                     fetchProduct()
@@ -112,7 +119,7 @@ const Edit = (props) => {
                 }
             })
             .catch(err => {
-                if (err.response.status === 409) {
+                if (err) {
                     failed(err.response.data.message)
                     setLoading(false)
                 }
@@ -124,7 +131,7 @@ const Edit = (props) => {
         let formData = new FormData()
         formData.append('product_image', selectedFile)
         setImageLoading(true)
-        axios.put(`${api}admin/product/update/${props.match.params.id}/image`, formData)
+        axios.put(`${api}admin/product/update/${props.match.params.id}/image`, formData, header)
             .then(res => {
                 if (res.status === 200) {
                     fetchProduct()
@@ -134,8 +141,9 @@ const Edit = (props) => {
                 }
             })
             .catch(err => {
-                if (err) {
-                    console.log(err.response)
+                if (err && err.response.status === 401) {
+                    setImageLoading(false)
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -260,7 +268,6 @@ const Edit = (props) => {
                                                         required: "Quantity is required"
                                                     })}
                                                 >
-                                                    <option defaultValue={product.brand}>{product.brand}</option>
 
                                                     {brands.length > 0 && brands.map((brand, i) =>
                                                         <option value={brand.id} key={i}>{brand.name}</option>
@@ -285,7 +292,6 @@ const Edit = (props) => {
                                                         required: "Category is required"
                                                     })}
                                                 >
-                                                    <option defaultValue={product.category}>{product.category}</option>
 
                                                     {categories.length > 0 && categories.map((category, i) =>
                                                         <option value={category.id} key={i}>{category.name}</option>
@@ -312,6 +318,29 @@ const Edit = (props) => {
                                                         minLength: {
                                                             value: 50,
                                                             message: "Please enter minimum 50 characters",
+                                                        },
+                                                    })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Tag */}
+                                        <div className="col-12">
+                                            <div className="form-group mb-3">
+                                                {errors.tag && errors.tag.message ? (
+                                                    <small className="text-danger">{errors.tag && errors.tag.message}</small>
+                                                ) : <small className="text-muted">Tag</small>
+                                                }
+                                                <input
+                                                    type="text"
+                                                    name="tag"
+                                                    defaultValue={product.tag}
+                                                    className="form-control shadow-none"
+                                                    ref={register({
+                                                        required: "Tag is required",
+                                                        minLength: {
+                                                            value: 5,
+                                                            message: "Please enter minimum 5 characters",
                                                         },
                                                     })}
                                                 />

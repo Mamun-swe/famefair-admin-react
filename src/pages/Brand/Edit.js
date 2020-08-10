@@ -33,6 +33,13 @@ const Edit = (props) => {
         message.warning(msg)
     }
 
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
     // Image Change
     const imageChangeHandeller = event => {
         let file = event.target.files[0]
@@ -59,14 +66,15 @@ const Edit = (props) => {
     // fetch data
     const fetchData = () => {
         setLoader(true)
-        axios.get(`${api}admin/brand/show/${props.match.params.id}`)
+        axios.get(`${api}admin/brand/show/${props.match.params.id}`, header)
             .then(res => {
                 setBrand(res.data)
                 setLoader(false)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err)
+                if (err && err.response.status === 401) {
+                    setLoader(false)
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -76,7 +84,7 @@ const Edit = (props) => {
         let formData = new FormData()
         formData.append('brand_image', selectedFile)
         setLoading(true)
-        axios.put(`${api}admin/brand/update/${props.match.params.id}/image`, formData)
+        axios.put(`${api}admin/brand/update/${props.match.params.id}/image`, formData, header)
             .then(res => {
                 if (res.status === 200) {
                     fetchData()
@@ -85,8 +93,9 @@ const Edit = (props) => {
                 }
             })
             .catch(err => {
-                if (err) {
-                    console.log(err.response)
+                if (err && err.response.status === 401) {
+                    setLoading(false)
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -94,7 +103,7 @@ const Edit = (props) => {
     // Submit Brand
     const submitBrand = data => {
         setSubmitLoading(true)
-        axios.put(`${api}admin/brand/update/${props.match.params.id}`, data)
+        axios.put(`${api}admin/brand/update/${props.match.params.id}`, data, header)
             .then(res => {
                 if (res.status === 200) {
                     fetchData()
@@ -106,6 +115,10 @@ const Edit = (props) => {
                 if (err.response.status === 409) {
                     failed(err.response.data.message)
                     setSubmitLoading(false)
+                }
+                if (err && err.response.status === 401) {
+                    setSubmitLoading(false)
+                    return failed(err.response.data.message);
                 }
             })
     }

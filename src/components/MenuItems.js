@@ -2,6 +2,8 @@ import React from 'react'
 import './Side-Menu.css'
 import $ from 'jquery'
 import { Icon } from 'react-icons-kit'
+import axios from 'axios'
+import api from '../url'
 
 import { meter } from 'react-icons-kit/icomoon/meter'
 import { thLarge } from 'react-icons-kit/typicons/thLarge'
@@ -23,6 +25,29 @@ const MenuItems = () => {
         $('.setting-sub-menu').toggle('50')
         $('.setting-rotate').toggleClass('down')
         $('.setting-toggle-dark').toggleClass('is-active')
+    }
+
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
+    const logout = () => {
+        axios.put(`${api}admin/auth/logout`, header)
+            .then(res => {
+                if (res.status === 200) {
+                    localStorage.clear()
+                    window.location.href = '/'
+                }
+            })
+            .catch(err => {
+                if (err) {
+                    localStorage.clear()
+                    window.location.href = '/'
+                }
+            })
     }
 
     return (
@@ -72,7 +97,7 @@ const MenuItems = () => {
                 <Icon icon={bell} className="mr-3" /><span className="pt-3">notifications</span>
                 <span className="float-right">10</span>
             </NavLink>
-            <button type="button" className="btn btn-block rounded-0 shadow-none">
+            <button type="button" className="btn btn-block rounded-0 shadow-none" onClick={logout}>
                 <Icon icon={power} className="mr-3" /><span className="pt-3">logout</span>
             </button>
         </div>

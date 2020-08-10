@@ -30,9 +30,20 @@ const BrandTable = ({ brand }) => {
         message.success('Successfully one brand deleted.')
     }
 
+    const failed = msg => {
+        message.warning(msg)
+    }
+
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
     const submitDelete = () => {
         setLoading(true)
-        axios.delete(`${api}admin/brand/delete/${brandId}`)
+        axios.delete(`${api}admin/brand/delete/${brandId}`, header)
             .then(res => {
                 if (res.status === 200) {
                     setLoading(false)
@@ -41,8 +52,10 @@ const BrandTable = ({ brand }) => {
                 }
             })
             .catch(err => {
-                if (err) {
-                    console.log(err.response)
+                if (err && err.response.status === 401) {
+                    setLoading(false)
+                    setVisible(false)
+                    return failed(err.response.data.message);
                 }
             })
     }

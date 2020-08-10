@@ -50,6 +50,17 @@ const Index = () => {
         message.success(msg);
     }
 
+    const failed = msg => {
+        message.warning(msg)
+    }
+
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
     // Image onChange
     const imageChangeHandeller = event => {
         let file = event.target.files[0]
@@ -69,7 +80,7 @@ const Index = () => {
     // fetch data
     const fetchData = () => {
         setLoader(true)
-        axios.get(`${api}admin/banner/index`)
+        axios.get(`${api}admin/banner/index`, header)
             .then(res => {
                 if (res.status === 204) {
                     setLoader(false)
@@ -78,6 +89,12 @@ const Index = () => {
                 setBanners(res.data.results)
                 setEmptyBanner(false)
                 setLoader(false)
+            })
+            .catch(err => {
+                if (err && err.response.status === 401) {
+                    setLoader(false)
+                    return failed(err.response.data.message);
+                }
             })
     }
 
@@ -88,7 +105,7 @@ const Index = () => {
         let formData = new FormData()
         formData.append('banner_image', selectedFile)
         setLoading(true)
-        axios.post(`${api}admin/banner/create`, formData)
+        axios.post(`${api}admin/banner/create`, formData, header)
             .then(res => {
                 if (res.status === 201) {
                     fetchData()
@@ -98,8 +115,9 @@ const Index = () => {
                 }
             })
             .catch(err => {
-                if (err) {
-                    console.log(err.response)
+                if (err && err.response.status === 401) {
+                    setVisible(false)
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -108,7 +126,7 @@ const Index = () => {
     // Submit Delete
     const submitDelete = () => {
         setLoading(true)
-        axios.delete(`${api}admin/banner/delete/${bannerId}`)
+        axios.delete(`${api}admin/banner/delete/${bannerId}`, header)
             .then(res => {
                 if (res.status === 200) {
                     fetchData()
@@ -118,8 +136,9 @@ const Index = () => {
                 }
             })
             .catch(err => {
-                if (err) {
-                    console.log(err.response)
+                if (err && err.response.status === 401) {
+                    hideDelete()
+                    return failed(err.response.data.message);
                 }
             })
     }

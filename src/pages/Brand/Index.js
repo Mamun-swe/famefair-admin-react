@@ -43,6 +43,13 @@ const Index = () => {
         message.warning(msg);
     }
 
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
     // Image onChange
     const imageChangeHandeller = event => {
         let file = event.target.files[0]
@@ -59,7 +66,7 @@ const Index = () => {
     // fetch data
     const fetchData = () => {
         setLoader(true)
-        axios.get(`${api}admin/brand/index`)
+        axios.get(`${api}admin/brand/index`, header)
             .then(res => {
                 if (res.status === 204) {
                     setLoader(false)
@@ -70,8 +77,9 @@ const Index = () => {
                 setLoader(false)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err.response)
+                if (err && err.response.status === 401) {
+                    setLoader(false)
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -82,7 +90,7 @@ const Index = () => {
         formData.append('name', data.name)
         formData.append('brand_image', selectedFile)
         setLoading(true)
-        axios.post(`${api}admin/brand/create`, formData)
+        axios.post(`${api}admin/brand/create`, formData, header)
             .then(res => {
                 if (res.status === 201) {
                     fetchData()
@@ -95,6 +103,10 @@ const Index = () => {
                 if (err.response.status === 409 && err.response.data.message === 'exist') {
                     failed('This brand already created .')
                     setLoading(false)
+                }
+                if (err && err.response.status === 401) {
+                    setLoading(false)
+                    return failed(err.response.data.message);
                 }
             })
     }

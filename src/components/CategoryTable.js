@@ -31,9 +31,20 @@ const CategoryTable = ({ category }) => {
         message.success('Successfully one category deleted.')
     }
 
+    const failed = msg => {
+        message.warning(msg)
+    }
+
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
     const submitDelete = () => {
         setLoading(true)
-        axios.delete(`${URL}admin/category/delete/${catId}`)
+        axios.delete(`${URL}admin/category/delete/${catId}`, header)
             .then(res => {
                 if (res.status === 200) {
                     setLoading(false)
@@ -42,8 +53,10 @@ const CategoryTable = ({ category }) => {
                 }
             })
             .catch(err => {
-                if (err) {
-                    console.log(err.response)
+                if (err && err.response.status === 401) {
+                    setLoading(false)
+                    setVisible(false)
+                    return failed(err.response.data.message);
                 }
             })
     }

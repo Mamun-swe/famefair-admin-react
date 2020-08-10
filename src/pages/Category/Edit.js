@@ -35,6 +35,13 @@ const Edit = (props) => {
         message.warning(msg)
     }
 
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
     // Image onChange
     const imageChangeHandeller = event => {
         let file = event.target.files[0]
@@ -63,15 +70,16 @@ const Edit = (props) => {
     // fetch category
     const fetchCategory = () => {
         setLoader(true)
-        axios.get(`${api}admin/category/show/${props.match.params.id}`)
+        axios.get(`${api}admin/category/show/${props.match.params.id}`, header)
             .then(res => {
                 setCategory(res.data)
                 setLoader(false)
                 setVisible(false)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err)
+                if (err && err.response.status === 401) {
+                    setLoader(false)
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -81,7 +89,7 @@ const Edit = (props) => {
         let formData = new FormData()
         formData.append('cat_image', selectedFile)
         setLoading(true)
-        axios.put(`${api}admin/category/update/${props.match.params.id}/image`, formData)
+        axios.put(`${api}admin/category/update/${props.match.params.id}/image`, formData, header)
             .then(res => {
                 if (res.status === 200) {
                     fetchCategory()
@@ -90,8 +98,9 @@ const Edit = (props) => {
                 }
             })
             .catch(err => {
-                if (err) {
-                    console.log(err.response)
+                if (err && err.response.status === 401) {
+                    setLoader(false)
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -99,7 +108,7 @@ const Edit = (props) => {
     // Submit Category
     const submitCategory = data => {
         setSubmitLoading(true)
-        axios.put(`${api}admin/category/update/${props.match.params.id}`, data)
+        axios.put(`${api}admin/category/update/${props.match.params.id}`, data, header)
             .then(res => {
                 if (res.status === 200) {
                     fetchCategory()
@@ -111,6 +120,10 @@ const Edit = (props) => {
                 if (err.response.status === 409) {
                     failed(err.response.data.message)
                     setSubmitLoading(false)
+                }
+                if (err && err.response.status === 401) {
+                    setLoader(false)
+                    return failed(err.response.data.message);
                 }
             })
     }

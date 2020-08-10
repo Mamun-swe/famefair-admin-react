@@ -4,6 +4,7 @@ import { Icon } from 'react-icons-kit'
 import axios from 'axios'
 import api from '../../url'
 import { Link } from 'react-router-dom'
+import { message } from 'antd'
 
 import { plus } from 'react-icons-kit/metrize/plus'
 import Loader from '../../components/Loader'
@@ -17,6 +18,17 @@ const Index = () => {
     const [categories, setCategories] = useState([])
     const [products, setProducts] = useState([])
 
+    const failed = msg => {
+        message.warning(msg)
+    }
+
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
     useEffect(() => {
         fetchCategories()
         fetchProducts()
@@ -24,13 +36,13 @@ const Index = () => {
 
     // fetch categories
     const fetchCategories = () => {
-        axios.get(`${api}admin/category/index`)
+        axios.get(`${api}admin/category/index`, header)
             .then(res => {
                 setCategories(res.data.results)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err)
+                if (err && err.response.status === 401) {
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -40,7 +52,7 @@ const Index = () => {
         if (event.target.value === 'All') {
             return fetchProducts()
         }
-        axios.get(`${api}admin/product/index?category=${event.target.value}`)
+        axios.get(`${api}admin/product/index?category=${event.target.value}`, header)
             .then(res => {
                 if (res.status === 204) {
                     setLoader(false)
@@ -51,16 +63,16 @@ const Index = () => {
                 setLoader(false)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err.response)
+                if (err && err.response.status === 401) {
+                    return failed(err.response.data.message);
                 }
             })
     }
 
     // fetch products
     const fetchProducts = () => {
-        setLoader(true)
-        axios.get(`${api}admin/product/index?category`)
+        setLoader(false)
+        axios.get(`${api}admin/product/index`, header)
             .then(res => {
                 if (res.status === 204) {
                     setLoader(false)
@@ -71,8 +83,9 @@ const Index = () => {
                 setLoader(false)
             })
             .catch(err => {
-                if (err) {
-                    console.log(err)
+                if (err && err.response.status === 401) {
+                    setLoader(false)
+                    return failed(err.response.data.message);
                 }
             })
     }

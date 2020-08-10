@@ -30,10 +30,21 @@ const ProductTable = ({ product }) => {
         message.success('Successfully one product deleted.')
     }
 
+    const failed = msg => {
+        message.warning(msg)
+    }
+
+    // Header 
+    const header = {
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+    }
+
     // Submit delete
     const submitDelete = () => {
         setLoading(true)
-        axios.delete(`${api}admin/product/delete/${productId}`)
+        axios.delete(`${api}admin/product/delete/${productId}`, header)
             .then(res => {
                 if (res.status === 200) {
                     setLoading(false)
@@ -42,8 +53,10 @@ const ProductTable = ({ product }) => {
                 }
             })
             .catch(err => {
-                if (err) {
-                    console.log(err.response)
+                if (err && err.response.status === 401) {
+                    setLoading(false)
+                    setVisible(false)
+                    return failed(err.response.data.message);
                 }
             })
     }
@@ -56,6 +69,7 @@ const ProductTable = ({ product }) => {
                     <tr className="border-bottom">
                         <td className="pl-3"><p>SL</p></td>
                         <td><p>Name</p></td>
+                        <td><p>Tag</p></td>
                         <td><p>Product Code</p></td>
                         <td><p>Brand</p></td>
                         <td><p>Category</p></td>
@@ -70,6 +84,7 @@ const ProductTable = ({ product }) => {
                         <tr className="border-bottom" key={i}>
                             <td className="pl-3 pt-3"><p>{i + 1}</p></td>
                             <td className="text-capitalize pt-3"><p>{data.name}</p></td>
+                            <td className="pt-3"><p>{data.tag}</p></td>
                             <td className="text-capitalize pt-3"><p>{data.code}</p></td>
                             <td className="text-capitalize pt-3"><p>{data.brand}</p></td>
                             <td className="text-capitalize pt-3"><p>{data.category}</p></td>
